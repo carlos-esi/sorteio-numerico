@@ -1,12 +1,9 @@
-import sys
 import asyncio
+import csv
 import random
 import time
-import csv
-import flet as ft
 
-if sys.platform.startswith("win"):
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+import flet as ft
 
 
 def main(page: ft.Page):
@@ -26,9 +23,9 @@ def main(page: ft.Page):
 
         await asyncio.sleep(2)
 
-        numbers = sorted(random.sample(range(min_num, max_num + 1), 1))
-        numeros_sorteados.insert(0, numbers[0])
-        todos_numeros_sorteados.append(numbers[0])
+        number = random.randint(min_num, max_num)
+        numeros_sorteados.insert(0, number)
+        todos_numeros_sorteados.append(number)
 
         if len(numeros_sorteados) > 10:
             numeros_sorteados.pop()
@@ -50,13 +47,12 @@ def main(page: ft.Page):
                     border_radius=25,
                     alignment=ft.alignment.center,
                 )
-                for number in numbers
             ],
             spacing=10,
             alignment=ft.MainAxisAlignment.CENTER,
         )
 
-        feedback_text.value = f"O ganhador é o número {numbers[0]}!"
+        feedback_text.value = f"O ganhador é o número {number}!"
         salvar_resultados()
         page.update()
         animar_quadro()
@@ -65,7 +61,7 @@ def main(page: ft.Page):
         feedback_text.value = "Limpando resultado..."
         page.update()
         txt_number.content = None
-        feedback_text.value = " "
+        feedback_text.value = ""
         page.update()
 
     def clear_quadro(e):
@@ -75,7 +71,8 @@ def main(page: ft.Page):
         todos_numeros_sorteados.clear()
         atualizar_quadro()
         limpar_arquivo()
-        feedback_text.value = " "
+        txt_number.content = None
+        feedback_text.value = ""
         page.update()
 
     def atualizar_quadro():
@@ -278,4 +275,4 @@ def main(page: ft.Page):
     page.add(container)
 
 
-ft.app(target=main)
+ft.run(main)
